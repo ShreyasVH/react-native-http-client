@@ -3,6 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Component } from 'react';
 import Play from './src/components/Play';
 import Springboot from './src/components/Springboot';
+import Phalcon from './src/components/Phalcon';
+import Express from './src/components/Express';
+import DotNetCore from './src/components/DotnetCore';
 
 export default class App extends Component {
   render () {
@@ -15,7 +18,19 @@ export default class App extends Component {
        <View>
          <Springboot />
        </View>
-       <StatusBar style="auto" />
+
+        <View>
+         <Phalcon />
+        </View>
+
+        <View>
+         <Express />
+        </View>
+
+        <View>
+         <DotNetCore />
+        </View>
+       {/*<StatusBar style="auto" />*/}
      </View>
     );
   }

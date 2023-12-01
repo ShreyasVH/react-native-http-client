@@ -16,7 +16,7 @@ export default class Play extends Component {
   this.getUrl = props.endpoint + '/api?input=abc';
   this.postUrl = props.endpoint + '/api';
   this.putUrl = props.endpoint + '/api';
-  this.deleteUrl = props.endpoint + '/api';
+  this.deleteUrl = props.endpoint + '/api?input=abc';
   this.payload = {
    a: 'A',
    b: 'B'
@@ -33,10 +33,10 @@ export default class Play extends Component {
   const deleteResponse = await del(this.deleteUrl);
 
   this.setState({
-   get: JSON.stringify(getResponse.data, null, ' '),
-   post: postResponse.data,
-   put: putResponse.data,
-   delete: deleteResponse.data,
+   get: JSON.stringify(getResponse.data),
+   post: JSON.stringify(postResponse.data),
+   put: JSON.stringify(putResponse.data),
+   delete: JSON.stringify(deleteResponse.data),
    loaded: true
   });
  }
@@ -99,9 +99,9 @@ export default class Play extends Component {
    return (
     <View>
      {this.renderGetPart()}
-     {this.renderPostPart()}
-     {this.renderPutPart()}
-     {this.renderDeletePart()}
+     {/*{this.renderPostPart()}*/}
+     {/*{this.renderPutPart()}*/}
+     {/*{this.renderDeletePart()}*/}
     </View>
    );
   }
