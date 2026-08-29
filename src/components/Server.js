@@ -38,7 +38,7 @@ export default function Server(props) {
   return loaded && <View dataSet={{ class: 'server' }}>
    {
     ['get', 'post', 'put', 'delete'].map(part => (
-        <View key={part} dataSet={{ class: 'part' }}>
+        <View key={part} dataSet={{ class: 'verb' }}>
          <Text style={props.styles.paragraph}>
           <Text style={props.styles.bold}>
            URL:&nbsp;
