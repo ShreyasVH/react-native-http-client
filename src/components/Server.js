@@ -1,117 +1,63 @@
 import { get, post, put, del } from '../utils/api';
-import { Component } from 'react';
 import { View, Text } from "react-native";
+import { useEffect, useState } from 'react';
 
-export default class Play extends Component {
- constructor(props) {
-  super(props);
-  this.state = {
-   get: '',
-   post: '',
-   put: '',
-   delete: '',
-   loaded: false
+export default function Server(props) {
+  const [ loaded, setLoaded ] = useState(false);
+  const [ responses, setResponses ] = useState({});
+  const urls = {
+   get: props.endpoint + '/api?input=abc',
+   post: props.endpoint + '/api',
+   put: props.endpoint + '/api',
+   delete: props.endpoint + '/api?input=abc'
   };
 
-  this.getUrl = props.endpoint + '/api?input=abc';
-  this.postUrl = props.endpoint + '/api';
-  this.putUrl = props.endpoint + '/api';
-  this.deleteUrl = props.endpoint + '/api?input=abc';
-  this.payload = {
+  const payload = {
    a: 'A',
    b: 'B'
   };
- }
 
- async componentDidMount() {
-  const getResponse = await get(this.getUrl);
+ useEffect(() => {
+  Promise.all([
+      get(urls.get),
+      post(urls.post, payload),
+      put(urls.put, payload),
+      del(urls.delete),
+  ]).then(([getResponse, postResponse, putResponse, deleteResponse]) => {
+   setResponses({
+    get: JSON.stringify(getResponse.data),
+    post: JSON.stringify(postResponse.data),
+    put: JSON.stringify(putResponse.data),
+    delete: JSON.stringify(deleteResponse.data),
+   });
 
-  const postResponse = await post(this.postUrl, this.payload);
-
-  const putResponse = await put(this.putUrl, this.payload);
-
-  const deleteResponse = await del(this.deleteUrl);
-
-  this.setState({
-   get: JSON.stringify(getResponse.data),
-   post: JSON.stringify(postResponse.data),
-   put: JSON.stringify(putResponse.data),
-   delete: JSON.stringify(deleteResponse.data),
-   loaded: true
+   setLoaded(true);
   });
- }
+ }, []);
 
- renderGetPart = () => {
-  return (
-   <View>
-    {this.renderPart('get')}
+  return loaded && <View dataSet={{ class: 'server' }}>
+   {
+    ['get', 'post', 'put', 'delete'].map(part => (
+        <View key={part} dataSet={{ class: 'part' }}>
+         <Text style={props.styles.paragraph}>
+          <Text style={props.styles.bold}>
+           URL:&nbsp;
+          </Text>
+          <Text>
+           {urls[part]}
+          </Text>
+         </Text>
+
+         <Text style={props.styles.paragraph}>
+          <Text style={props.styles.bold}>
+           Response:&nbsp;
+          </Text>
+          <Text>
+           {responses[part]}
+          </Text>
+         </Text>
+        </View>
+    ))
+   }
    </View>
-  );
- }
-
- renderPostPart = () => {
-  return (
-   <View>
-    {this.renderPart('post')}
-   </View>
-  );
- }
-
- renderPutPart = () => {
-  return (
-   <View>
-    {this.renderPart('put')}
-   </View>
-  );
- }
-
- renderDeletePart = () => {
-  return (
-   <View>
-    {this.renderPart('delete')}
-   </View>
-  );
- }
-
-
- renderPart = type => {
-  return (
-   <View>
-    <Text>
-      URL:
-     <Text>
-         {this[type + 'Url']}
-     </Text>
-    </Text>
-
-    <Text>
-      Response:
-     <Text>
-         {this.state[type]}
-     </Text>
-    </Text>
-   </View>
-  );
- }
-
- renderParts = () => {
-  if (this.state.loaded) {
-   return (
-    <View>
-     {this.renderGetPart()}
-     {/*{this.renderPostPart()}*/}
-     {/*{this.renderPutPart()}*/}
-     {/*{this.renderDeletePart()}*/}
-    </View>
-   );
-  }
- }
-
- render() {
-  return (
-   <View>
-    {this.renderParts()}
-   </View>
-  );
- }
 }
