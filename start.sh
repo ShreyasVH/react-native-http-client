@@ -1,1 +1,1 @@
-npm run start;
+BROWSER=none npm run web -- --port=$PORT
